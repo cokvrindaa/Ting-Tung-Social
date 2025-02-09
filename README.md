@@ -7,7 +7,7 @@
 
 - 💲 Lisensi **pakai sepuasnya hehe**
 
-- 👯 Tanggal di buat **01/02/2024**
+- 👯 Tanggal di buat **01/02/2025**
 
 - 🧑‍💻 Teknologi yang di pakai **Html, Tailwindcss, Pure javascript, Pure PHP, My SQL**
 

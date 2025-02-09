@@ -1,0 +1,36 @@
+<?php
+  include '../config/config.php';
+  session_start();
+  // Jika tidak ada sesi user maka akan balik ke index.php
+  if (!isset($_SESSION['user_id'])) {
+    header("Location: /index.php");
+    exit;
+  }
+  $oleh = $_SESSION['username'];
+  
+  
+if (isset($_POST['submit'])) {
+    $teks = $_POST['teks'];
+    $gambar = $_FILES['gambar'];
+    // Simpan gambar ke folder "uploads"
+    $nama_gambar = $gambar['name'];
+    $tmp_gambar = $gambar['tmp_name'];
+    $folder_upload = "uploads/";
+
+    // Buat folder "uploads" jika belum ada
+    if (!is_dir($folder_upload)) {
+        mkdir($folder_upload, 0777, true);
+    }
+
+    // Pindahkan file ke folder upload
+    move_uploaded_file($tmp_gambar, $folder_upload . $nama_gambar);
+    
+    // Simpan data ke database
+    $query = "INSERT INTO beranda (teks, gambar, oleh) VALUES ('$teks', '$nama_gambar', '$oleh')";
+    if (mysqli_query($koneksi, $query)) {
+        header("Location: /beranda/main.php"); // Redirect ke halaman utama
+    } else {
+        echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
+    }
+}
+?>

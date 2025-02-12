@@ -47,7 +47,10 @@ $isLikedByUser = isset($row['isLikedByUser']) ? $row['isLikedByUser'] > 0 : fals
                 <p class="font-semibold text-sm mt-[-2px]">@<?php echo $row['oleh']; ?></p>
             </div>
 
-            <img class="rounded-2xl mt-3 mb-3 w-9/12" src="uploads/<?php echo $row['gambar']; ?>" alt="Gambar">
+            <?php if (!empty($row['gambar'])){ ?>
+            <img class="rounded-2xl mt-3 mb-3 w-9/12" src="uploads/<?php echo htmlspecialchars($row['gambar']); ?>"
+                alt="Gambar">
+            <?php } ?>
             <p><?php echo $row['teks']; ?></p>
 
             <div class="flex gap-2">

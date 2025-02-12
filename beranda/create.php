@@ -12,10 +12,15 @@
 if (isset($_POST['submit'])) {
     $teks = $_POST['teks'];
     $gambar = $_FILES['gambar'];
+    $video = $_FILES['video'];
     // Simpan gambar ke folder "uploads"
     $nama_gambar = $gambar['name'];
     $tmp_gambar = $gambar['tmp_name'];
     $folder_upload = "uploads/";
+
+    $nama_video = $video['name'];
+    $tmp_video = $video['tmp_name'];
+    $folder_upload_video = "uploads/";
 
     // Buat folder "uploads" jika belum ada
     if (!is_dir($folder_upload)) {
@@ -24,13 +29,17 @@ if (isset($_POST['submit'])) {
 
     // Pindahkan file ke folder upload
     move_uploaded_file($tmp_gambar, $folder_upload . $nama_gambar);
+    move_uploaded_file($tmp_video, $folder_upload . $nama_video);
     
     // Simpan data ke database
-    $query = "INSERT INTO beranda (teks, gambar, oleh) VALUES ('$teks', '$nama_gambar', '$oleh')";
+    $query = "INSERT INTO beranda (teks, gambar, video, oleh) VALUES ('$teks', '$nama_gambar','$nama_video', '$oleh')";
     if (mysqli_query($koneksi, $query)) {
         header("Location: /beranda/main.php"); // Redirect ke halaman utama
     } else {
         echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
     }
+
+
+
 }
 ?>

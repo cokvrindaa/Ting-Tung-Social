@@ -48,8 +48,17 @@
                 </div>
                 <p class="text-sm"><b><?php echo $row['waktu'];?></b></p>
             </div>
+            <?php if (!empty($row['gambar'])){ ?>
+            <img class="rounded-2xl mt-3 mb-3 w-9/12" src="uploads/<?php echo htmlspecialchars($row['gambar']); ?>"
+                alt="Gambar">
+            <?php } ?>
 
-            <img class=" rounded-2xl mt-3 mb-3 w-9/12" src="uploads/<?php echo $row['gambar']; ?>" alt="Gambar">
+            <?php if (!empty($row['video'])){ ?>
+            <video class="rounded-2xl mt-3 mb-3 w-9/12" controls>
+                <source src='uploads/<?php echo htmlspecialchars($row['video']) ?>' type='video/mp4'>
+            </video>
+            <?php } ?>
+
             <p><?php echo $row['teks']; ?></p>
 
             <div class="flex gap-2">
@@ -69,7 +78,7 @@
         if($_SESSION['username']===$row['oleh']){
         ?> <form action="hapus.php" method="post">
                 <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                <button type="submit">hapus</button>
+                <button type="submit" class=" bg-red-600 text-white p-2 rounded-md">hapus</button>
             </form>
             <?php
         }

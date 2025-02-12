@@ -12,7 +12,10 @@
   $query = "SELECT * FROM beranda";
   $result = mysqli_query($koneksi, $query);
 
-
+  if(isset($_post['submit'])){
+    header("Location: /beranda/createpage.php");
+    exit;
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,19 +41,32 @@
                 placeholder="akuuu akan mempostingg sesuatuu tentangg....." required></textarea>
 
 
+
+
+            <video id="previewVideo" controls style="display: none;" class="w-full my-5"></video>
             <img id="preview" src="#" alt="Preview Gambar" class=" w-full my-5" style="display: none; ">
-            <div class="flex  justify-between"> <label for="gambar"
-                    class="file-upload bg-black text-white rounded-md p-2">
-                    <i class="fa-regular fa-image mr-3"></i>Gambar </label>
+            <div class="flex  justify-between">
+                <div class="flex gap-4">
+                    <label for="gambar" class="file-upload bg-black text-white rounded-md p-2">
+                        <i class="fa-regular fa-image mr-3"></i>Gambar
+                    </label>
+                    <label for="video" class=" bg-black text-white rounded-md p-2">
+                        <i class="fa-solid fa-video mr-3"></i>Video
+                    </label>
+                </div>
+
+
                 <button type="submit" name="submit" class=" bg-black text-white rounded-md p-2">Upload</button>
             </div>
 
-            <input type="file" hidden id="gambar" name="gambar" required accept="image/*"
-                onchange="previewImage(event)">
-            <!-- Tambahkan style agar tidak tampil awalnya -->
+            <input type="file" hidden name="video" accept="video/*" id="video" onchange="previewVideo(event)">
+
+            <input type="file" hidden id="gambar" name="gambar" accept="image/*" onchange="previewImage(event)">
 
         </form>
-
+        <form action="createpage.php" method="post">
+            <button type="submit" class=" bg-red-600 text-white p-2 rounded-md">batalkan</button>
+        </form>
     </div>
 
 
@@ -68,6 +84,21 @@
     </div>
     <script src="https://kit.fontawesome.com/27ec8e2fe3.js" crossorigin="anonymous"></script>
     <script src="/beranda/script.js"></script>
+    <script>
+    function previewVideo(event) {
+        const videoPreview = document.getElementById("previewVideo");
+        const file = event.target.files[0];
+
+        if (file) {
+            const fileURL = URL.createObjectURL(file);
+            videoPreview.src = fileURL;
+            videoPreview.style.display = "block";
+            videoPreview.load();
+        } else {
+            videoPreview.style.display = "none";
+        }
+    }
+    </script>
 </body>
 
 </html>

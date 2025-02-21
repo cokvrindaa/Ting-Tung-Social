@@ -1,18 +1,28 @@
 <?php
-  // Sesi tertentu
-  session_start();
-  require '../config/config.php';
-  // Jika tidak ada sesi user maka akan balik ke index.php
-  if (!isset($_SESSION['user_id'])) {
-    header("Location: /index.php");
-    exit;
-  }
-  
+    // Sesi tertentu
+    session_start();
+    require '../config/config.php';
+    // Jika tidak ada sesi user maka akan balik ke index.php
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: /index.php");
+        exit;
+    }
+    
 
-  $query = "SELECT * FROM beranda";
-  $result = mysqli_query($koneksi, $query);
+    $query = "SELECT * FROM beranda";
+    $result = mysqli_query($koneksi, $query);
 
+    $user_id = $_SESSION['user_id']; // ID pengguna yang login
+    $username = $_SESSION['username'];
+    $query = "SELECT beranda.*, users.profile_pic, 
+    (SELECT COUNT(*) FROM likes WHERE likes.post_id = beranda.id) AS like_count,
+    (SELECT COUNT(*) FROM likes WHERE likes.post_id = beranda.id AND likes.user_id = '$user_id') AS isLikedByUser,
+    (SELECT COUNT(*) FROM follow WHERE follow.following_id = users.username) AS follower_count,
+    (SELECT COUNT(*) FROM follow WHERE follow.follower_id = '$username' AND follow.following_id = users.username) AS isFollowing
+    FROM beranda 
+    JOIN users ON beranda.oleh = users.username";
 
+    $result = mysqli_query($koneksi, $query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,31 +40,51 @@
     <div class=" mb-5 p-5">
 
         <?php
-        $result = mysqli_query($koneksi, "SELECT beranda.*, 
-        (SELECT COUNT(*) FROM likes WHERE likes.post_id = beranda.id) AS like_count,
-        (SELECT COUNT(*) FROM likes WHERE likes.post_id = beranda.id AND likes.user_id = {$_SESSION['user_id']}) AS isLikedByUser
-        FROM beranda");
+
     
         if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $isLikedByUser = isset($row['isLikedByUser']) ? $row['isLikedByUser'] > 0 : false; 
-
+            $profile_pic = !empty($row['profile_pic']) ? "uploads/" . $row['profile_pic'] : null;
+            $isFollowing = $row['isFollowing'] > 0;
         ?>
         <div class="data-item mb-5 p-2">
-            <div class="flex justify-between w-9/12">
+            <div class="flex justify-between w-full">
                 <div class="flex items-center space-x-2">
+                    <?php if ($profile_pic) { ?>
+                    <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" class="w-8 h-8 rounded-full">
+                    <?php } else { ?>
                     <i class="fa-solid fa-user text-lg"></i>
-                    <p class="font-semibold text-sm mt-[-2px]">@<?php echo $row['oleh']; ?></p>
+                    <?php } ?>
+                    <p class="font-semibold text-sm mt-[-2px]">
+                        <a href="profileselect.php?username=<?php echo urlencode($row['oleh']); ?>"
+                            class="text-blue-500 hover:underline">
+                            @<?php echo $row['oleh']; ?>
+                        </a>
+                        <span class="text-xs text-gray-500">(<?php echo $row['follower_count']; ?> followers)</span>
+                    </p>
+
+
+
+                    <?php if ($username != $row['oleh']) { ?>
+                    <form action="follow.php" method="POST">
+                        <input type="hidden" name="following_id" value="<?php echo $row['oleh']; ?>">
+                        <button type="submit"
+                            class="text-xs px-2 py-1 rounded-md <?php echo $row['isFollowing'] ? 'bg-gray-400 text-white' : 'bg-blue-500 text-white'; ?>">
+                            <?php echo $row['isFollowing'] ? 'Unfollow' : 'Follow'; ?>
+                        </button>
+                    </form>
+                    <?php } ?>
                 </div>
-                <p class="text-sm"><b><?php echo $row['waktu'];?></b></p>
+                <p class="text-sm my-auto"><b><?php echo $row['waktu'];?></b></p>
             </div>
             <?php if (!empty($row['gambar'])){ ?>
-            <img class="rounded-2xl mt-3 mb-3 w-9/12" src="uploads/<?php echo htmlspecialchars($row['gambar']); ?>"
+            <img class="rounded-2xl mt-3 mb-3 w-full" src="uploads/<?php echo htmlspecialchars($row['gambar']); ?>"
                 alt="Gambar">
             <?php } ?>
 
             <?php if (!empty($row['video'])){ ?>
-            <video class="rounded-2xl mt-3 mb-3 w-9/12" controls>
+            <video class="rounded-2xl mt-3 mb-3 w-full" controls>
                 <source src='uploads/<?php echo htmlspecialchars($row['video']) ?>' type='video/mp4'>
             </video>
             <?php } ?>

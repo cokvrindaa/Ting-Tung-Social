@@ -1,4 +1,5 @@
 <?php
+  date_default_timezone_set('Asia/Makassar');
   include '../config/config.php';
   session_start();
   // Jika tidak ada sesi user maka akan balik ke index.php
@@ -7,7 +8,6 @@
     exit;
   }
   $oleh = $_SESSION['username'];
-  
   
 if (isset($_POST['submit'])) {
     $teks = $_POST['teks'];
@@ -32,7 +32,8 @@ if (isset($_POST['submit'])) {
     move_uploaded_file($tmp_video, $folder_upload . $nama_video);
     
     // Simpan data ke database
-    $query = "INSERT INTO beranda (teks, gambar, video, oleh) VALUES ('$teks', '$nama_gambar','$nama_video', '$oleh')";
+    $waktu_sekarang = date('Y-m-d H:i:s'); // Format yang sesuai untuk DATETIME
+    $query = "INSERT INTO beranda (teks, gambar, video, oleh, waktu) VALUES ('$teks', '$nama_gambar','$nama_video', '$oleh', '$waktu_sekarang')";
     if (mysqli_query($koneksi, $query)) {
         header("Location: /beranda/main.php"); // Redirect ke halaman utama
     } else {

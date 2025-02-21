@@ -4,18 +4,18 @@
   require '../config/config.php';
   // Jika tidak ada sesi user maka akan balik ke index.php
   if (!isset($_SESSION['user_id'])) {
-    header("Location: /index.php");
-    exit;
-  }
-  
-
-  $query = "SELECT * FROM beranda";
-  $result = mysqli_query($koneksi, $query);
-
-  if(isset($_post['submit'])){
-    header("Location: /beranda/createpage.php");
-    exit;
-  }
+      header("Location: /index.php");
+      exit;
+    }
+    
+    
+    $query = "SELECT * FROM beranda";
+    $result = mysqli_query($koneksi, $query);
+    
+    if(isset($_post['submit'])){
+        header("Location: /beranda/createpage.php");
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,9 +40,6 @@
             <textarea type="text" class=" w-full py-2 border-none  h-28 resize-none focus:outline-none" name="teks"
                 placeholder="akuuu akan mempostingg sesuatuu tentangg....." required></textarea>
 
-
-
-
             <video id="previewVideo" controls style="display: none;" class="w-full my-5"></video>
             <img id="preview" src="#" alt="Preview Gambar" class=" w-full my-5" style="display: none; ">
             <div class="flex  justify-between">
@@ -60,9 +57,7 @@
             </div>
 
             <input type="file" hidden name="video" accept="video/*" id="video" onchange="previewVideo(event)">
-
             <input type="file" hidden id="gambar" name="gambar" accept="image/*" onchange="previewImage(event)">
-
         </form>
         <form action="createpage.php" method="post">
             <button type="submit" class=" bg-red-600 text-white p-2 rounded-md">batalkan</button>
@@ -79,11 +74,13 @@
 
             </a>
             <i class="fa-solid fa-plus text-4xl text-black mt-[-2px]"></i>
-            <i class="fa-solid fa-user text-3xl text-gray-400"></i>
+            <a href="/beranda/profile.php">
+
+                <i class="fa-solid fa-user text-3xl text-gray-400"></i>
+            </a>
         </div>
     </div>
     <script src="https://kit.fontawesome.com/27ec8e2fe3.js" crossorigin="anonymous"></script>
-    <script src="/beranda/script.js"></script>
     <script>
     function previewVideo(event) {
         const videoPreview = document.getElementById("previewVideo");
@@ -96,6 +93,22 @@
             videoPreview.load();
         } else {
             videoPreview.style.display = "none";
+        }
+    }
+
+    function previewImage(event) {
+        const preview = document.getElementById("preview");
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(imglink) {
+                preview.src = imglink.target.result;
+                preview.style.display = "block"; // Tampilkan gambar setelah dipilih
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = "none"; // Sembunyikan jika tidak ada file
         }
     }
     </script>

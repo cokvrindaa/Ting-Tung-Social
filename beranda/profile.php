@@ -78,28 +78,31 @@ $posts_result = mysqli_query($koneksi, $posts_query);
         </div>
 
     </div>
-    <div class="p-5">
+    <div class="p-5 mb-10">
         <h2 class="text-xl font-bold">Postingan Saya</h2>
         <?php while ($row = mysqli_fetch_assoc($posts_result)) { ?>
-        <?php if (!empty($row['gambar'])){ ?>
-        <img class="rounded-2xl mt-3 mb-3 w-10/12" src="uploads/<?php echo htmlspecialchars($row['gambar']); ?>"
-            alt="Gambar">
-        <?php } ?>
+        <div class=" shadow-lg p-5 rounded-lg mb-5">
+            <?php if (!empty($row['gambar'])){ ?>
+            <img class="rounded-2xl mt-3 mb-3 " src="uploads/<?php echo htmlspecialchars($row['gambar']); ?>"
+                alt="Gambar">
+            <?php } ?>
 
-        <?php if (!empty($row['video'])){ ?>
-        <video class="rounded-2xl mt-3 mb-3 w-10/12" controls>
-            <source src='uploads/<?php echo htmlspecialchars($row['video']) ?>' type='video/mp4'>
-        </video>
-        <?php } ?>
+            <?php if (!empty($row['video'])){ ?>
+            <video class="rounded-2xl mt-3 mb-3 " controls>
+                <source src='uploads/<?php echo htmlspecialchars($row['video']) ?>' type='video/mp4'>
+            </video>
+            <?php } ?>
 
-        <p><?php echo $row['teks']; ?></p>
-        <!-- Tombol Like -->
-        <div class="flex gap-2">
-            <form action="like.php" method="post">
-                <input type="hidden" name="post_id" value="<?php echo $row['id']; ?>" />
-                <p><?php echo $row['like_count']; ?> suka</p>
-            </form>
+            <p><?php echo $row['teks']; ?></p>
+            <!-- Tombol Like -->
+            <div class="flex gap-2">
+                <form action="like.php" method="post">
+                    <input type="hidden" name="post_id" value="<?php echo $row['id']; ?>" />
+                    <p><?php echo $row['like_count']; ?> suka</p>
+                </form>
+            </div>
         </div>
+
 
         <?php } ?>
 

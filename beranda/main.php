@@ -61,16 +61,15 @@
                             class="text-blue-500 hover:underline">
                             @<?php echo $row['oleh']; ?>
                         </a>
-                        <span class="text-xs text-gray-500">(<?php echo $row['follower_count']; ?> followers)</span>
                     </p>
 
 
 
                     <?php if ($username != $row['oleh']) { ?>
-                    <form action="follow.php" method="POST">
+                    <form action="follow.php" method="POST" class=" items-center mt-4">
                         <input type="hidden" name="following_id" value="<?php echo $row['oleh']; ?>">
                         <button type="submit"
-                            class="text-xs px-2 py-1 rounded-md <?php echo $row['isFollowing'] ? 'bg-gray-400 text-white' : 'bg-blue-500 text-white'; ?>">
+                            class="text-xs px-2 py-1 rounded-md  <?php echo $row['isFollowing'] ? 'bg-gray-400 text-white' : 'bg-blue-500 text-white'; ?>">
                             <?php echo $row['isFollowing'] ? 'Unfollow' : 'Follow'; ?>
                         </button>
                     </form>
@@ -131,6 +130,7 @@
             <i class="fa-solid fa-house text-3xl text-black"></i>
             <a href="/beranda/createpage.php"> <i class="fa-solid fa-plus text-4xl text-gray-400 mt-[-2px]"></i>
             </a>
+            <a href="/komunitas/main.php"><i class="fa-solid fa-comments text-3xl text-gray-400"></i></a>
             <a href="/beranda/profile.php"> <i class="fa-solid fa-user text-3xl text-gray-400"></i>
             </a>
         </div>

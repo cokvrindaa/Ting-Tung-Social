@@ -7,6 +7,7 @@
     exit;
   }
   $namakomunitas = $_POST['nama'];
+  $username = $_SESSION['username'];
 
 //   Generate random string untuk mengidentifikasi suatu komunias.
     function generateRandomString($length = 10) {
@@ -30,10 +31,9 @@
 
     // Amankan nama tabel (hapus karakter aneh kecuali underscore dan huruf/angka)
   $sql = "CREATE TABLE `$namakomunitas`(
-    id INT(2)  PRIMARY KEY, 
-    firstname VARCHAR(30) NOT NULL,
-    lastname VARCHAR(30) NOT NULL,
-    email VARCHAR(50)
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    chat TEXT,
+    username VARCHAR(100)
     )";
     if (mysqli_query($koneksi, $sql)) {
         header("Location: /komunitas/main.php"); // Redirect ke halaman utama
